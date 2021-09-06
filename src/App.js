@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from "react";
+import Task from "./components/Task"
+import TaskItem from "./components/TaskItem";
+import './App.scss'
+import Home from "./home";
+import Navbar from "./navbar";
+import Register from "./components/Register";
+import Login from "./components/Login";
+import {BrowserRouter as  Switch, Route} from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component{
+    constructor(props){
+            super(props);
+            this.state={
+                user: ''
+            }
+    }
+
+
+    handle_inputvalue = (user) =>{
+
+        console.log("INSIDE NAV USER->", user)
+        this.setState({
+            user: user
+        })
+
+        localStorage.setItem('username', user)
+    }
+
+
+    render(){
+        return(
+        <div className="App">
+        <Switch>
+            <Navbar user = {this.state.user}/>
+            <Route exact path = "/" component = {Home}/> 
+
+            <Route path="/task" render={props => <Task handle_inputvalue = {this.handle_inputvalue.bind(this)} />} />
+
+            <Route exact path = "/task-item" component = {TaskItem}/> 
+            <Route exact path = "/register" component = {Register}/> 
+            <Route exact path = "/login" component = {Login}/> 
+
+        </Switch>
+        </div>
+        )
+    }
 }
-
-export default App;
